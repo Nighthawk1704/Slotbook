@@ -10,23 +10,29 @@ Built with **Next.js (App Router) + PostgreSQL + Drizzle ORM**.
 
 ## Run it
 
-You need Docker (for Postgres) and Node 20+.
+You need Docker and Node 20+.
+
+### Option A — fully containerized (one command)
+
+Builds and runs the whole app, database included:
 
 ```bash
-# 1. Install deps
+docker compose up --build -d
+docker compose exec web npm run db:seed
+```
+
+Open http://localhost:3000. To stop: `docker compose down`.
+
+### Option B — Postgres in Docker, app run locally
+
+Useful if you want hot-reload while making changes:
+
+```bash
 npm install
-
-# 2. Start Postgres
-docker compose up -d
-
-# 3. Configure env (defaults already match docker-compose)
+docker compose up -d        # starts Postgres only; ignore the web container for this option
 cp .env.example .env
-
-# 4. Create the schema and seed data
 npm run db:push
 npm run db:seed
-
-# 5. Run
 npm run dev
 ```
 

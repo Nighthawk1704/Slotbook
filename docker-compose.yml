@@ -15,5 +15,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://slotbook:slotbook@db:5432/slotbook"
+      AUTH_SECRET: "dev-secret-change-me-to-a-long-random-string"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npm run db:push && npm run start"
+
 volumes:
   slotbook_pgdata:
